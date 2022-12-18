@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\Authentication\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('authentication')->group(function () {
+    Route::post('login', [AuthenticationController::class, 'login'])->name('authentication.login');
+    Route::post('register', [AuthenticationController::class, 'register'])->name('authentication.register');
+    Route::post('password/forgot', [AuthenticationController::class, 'sendPasswordResetLinkEmail'])->name('authentication.password.forgot');
+    Route::post('password/reset', [AuthenticationController::class, 'resetPassword'])->name('authentication.password.reset');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('logout', [AuthenticationController::class, 'logout'])->name('authentication.logout');
+        Route::get('me', [AuthenticationController::class, 'getAuthenticatedUser'])->name('authentication.me');
+    });
 });
