@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
- use App\Models\Administrator;
- use App\Models\User;
- use Illuminate\Foundation\Testing\RefreshDatabase;
- use Illuminate\Support\Facades\DB;
- use Illuminate\Support\Facades\Hash;
- use Illuminate\Support\Facades\Password;
- use Laravel\Sanctum\Sanctum;
- use Tests\TestCase;
+use App\Models\Administrator;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
+
 
 class AuthenticationTest extends TestCase
 {
@@ -31,21 +32,13 @@ class AuthenticationTest extends TestCase
             'password' => Hash::make($this->unhashedUserPassword)
         ]);
 
-        Administrator::factory()->create([
-            'user_id' => $this->administrator->id
-        ]);
-
         $this->administratorWithoutUnverifiedEmail = User::factory()->create([
             'password' => Hash::make($this->unhashedUserPassword),
             'email_verified_at' => null
         ]);
-
-        Administrator::factory()->create([
-            'user_id' => $this->administratorWithoutUnverifiedEmail->id
-        ]);
     }
 
-    /** @test */
+
     public function test_a_valid_and_verified_user_can_login_with_correct_email_and_password()
     {
         $userCredentials['email'] = $this->administrator->email;

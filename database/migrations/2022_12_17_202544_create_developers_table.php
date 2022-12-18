@@ -18,10 +18,6 @@ return new class extends Migration
             $table->boolean('is_available')->default(false);
             $table->integer('availability_to_start_working_in_days')->nullable();
             $table->string('summary')->nullable();
-
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-
             $table->timestamps();
             $table->softDeletes();
         });

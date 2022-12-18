@@ -10,7 +10,6 @@ class Developer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'availability_to_start_working_in_days',
         'summary'
     ];
