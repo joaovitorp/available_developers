@@ -9,7 +9,7 @@
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) 
 # AvailableDevelopers.com
 
-AvailableDevelopers.com is a platform that aims to connect recruiters with developers seeking employment. Our goal is to make it simple and straightforward for developers to register and keep their availability and personal information up-to-date, while providing recruiters with the tools to find the best candidates for their open positions.
+AvailableDevelopers.com is a platform that aims to connect recruiters with developers seeking employment. Our goal is to make it simple and straightforward for developers to register and keep their availability and personal information up-to-date, while providing recruiters tools to find the best candidates for their open positions.
 
 ### Built With
 
