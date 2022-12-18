@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('email')->unique();
             $table->string('profile_type');
-            $table->unsignedInteger('profile_id');
+            $table->unsignedInteger('profile_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

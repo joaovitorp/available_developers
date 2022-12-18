@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Authentication;
 
+use App\Enum\ProfileTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -23,10 +24,14 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
+        $developerProfileType = ProfileTypeEnum::Developer->name;
+        $recruiterProfileType = ProfileTypeEnum::Recruiter->name;
+
         return [
             'email' => 'required|email|unique:users,email',
             'name' => 'required|string|max:255',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
+            'profile_type' => "required|string|in:${developerProfileType},${recruiterProfileType}",
         ];
     }
 }

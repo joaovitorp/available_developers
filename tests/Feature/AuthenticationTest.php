@@ -2,12 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Enum\ProfileTypeEnum;
 use App\Models\Administrator;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Session;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -76,14 +78,15 @@ class AuthenticationTest extends TestCase
 
     public function test_user_cant_login_with_unverified_email()
     {
+        Session::start();
+
         $userCredentials['email'] = $this->administratorWithoutUnverifiedEmail->email;
         $userCredentials['password'] = $this->unhashedUserPassword;
 
         $response = $this->post(route('authentication.login'), $userCredentials);
 
-        //@@TODO: Check what's the error message
         $response->assertSessionHasErrors([
-            'email' => '???????? unverified email message'
+            'email' => 'Your email address is not verified. Please, check your inbox.'
         ]);
     }
 
@@ -101,6 +104,8 @@ class AuthenticationTest extends TestCase
 
     public function test_user_cant_login_with_invalid_email()
     {
+        Session::start();
+
         $userCredentials['email'] = 'email@mail.com';
         $userCredentials['password'] = '123456';
 
@@ -115,7 +120,9 @@ class AuthenticationTest extends TestCase
     {
         $userData['name'] = 'Test User';
         $userData['email'] = 'testing@mail.com';
-        $userData['password'] = '123456';
+        $userData['password'] = '12345678';
+        $userData['password_confirmation'] = '12345678';
+        $userData['profile_type'] = ProfileTypeEnum::Developer->name;
 
         $this->post(route('authentication.register'), $userData)->assertCreated();
     }
@@ -212,7 +219,9 @@ class AuthenticationTest extends TestCase
     {
         $userData['name'] = 'Test User';
         $userData['email'] = 'email@mail.com';
-        $userData['password'] = '12345';
+        $userData['password'] = '1234567';
+        $userData['password_confirmation'] = '1234567';
+        $userData['profile_type'] = ProfileTypeEnum::Developer->name;
 
         $response = $this->post(route('authentication.register'), $userData);
 
@@ -294,9 +303,7 @@ class AuthenticationTest extends TestCase
             'message'
         ]);
 
-        $this->assertEquals("Your password has been reset!", $response[
-        'message'
-        ]);
+        $this->assertEquals("Your password has been reset!", $response['message']);
     }
 
     public function test_cant_reset_password_when_token_is_invalid()
@@ -315,9 +322,7 @@ class AuthenticationTest extends TestCase
             'message'
         ]);
 
-        $this->assertEquals("This password reset token is invalid.", $response[
-        'message'
-        ]);
+        $this->assertEquals("This password reset token is invalid.", $response['message']);
     }
 
     public function test_cant_reset_password_when_email_is_not_valid()
@@ -342,7 +347,7 @@ class AuthenticationTest extends TestCase
     {
         $user = $this->administrator;
         $token = Password::broker()->createToken($user);
-        $newPassword = rand(0,7);
+        $newPassword = '1234567';
 
         $response = $this->json('POST', route('authentication.password.reset'), [
             'token' => $token,
@@ -420,7 +425,6 @@ class AuthenticationTest extends TestCase
 
     public function test_cant_reset_password_with_expired_token()
     {
-        //@@TODO: Validate this test
         $user = User::factory()->create();
         $token = Password::broker()->createToken($user);
         $password = 'newpassword';
@@ -429,7 +433,7 @@ class AuthenticationTest extends TestCase
             'created_at' => now()->subHours(2)
         ]);
 
-        $response = $this->json('POST', route('password.reset'), [
+        $response = $this->json('POST', route('authentication.password.reset'), [
             'token' => $token,
             'email' => $user->email,
             'password' => $password,
@@ -441,6 +445,21 @@ class AuthenticationTest extends TestCase
             'message'
         ]);
         $this->assertEquals("This password reset token is invalid.", $response->json('message'));
+    }
+
+    public function test_can_register_user_with_administrator_profile_type()
+    {
+        $userData['name'] = 'Test User';
+        $userData['email'] = 'testing@mail.com';
+        $userData['password'] = '12345678';
+        $userData['password_confirmation'] = '12345678';
+        $userData['profile_type'] = ProfileTypeEnum::Administrator->name;
+
+        $response = $this->post(route('authentication.register'), $userData);
+
+        $response->assertSessionHasErrors([
+            'profile_type' => 'The selected profile type is invalid.'
+        ]);
     }
 }
 

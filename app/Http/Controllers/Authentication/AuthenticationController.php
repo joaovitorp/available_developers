@@ -10,8 +10,9 @@ use App\Http\Requests\Authentication\SendPasswordResetLinkEmailRequest;
 use App\Http\Resources\UserResource;
 use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -35,6 +36,7 @@ class AuthenticationController extends Controller
 
         if ($authAttemptWasSuccessful) {
             $user = auth()->user();
+
             $responseData['name'] =  $user->name;
             $responseData['access_token'] =  $user->createToken('LaravelSanctumAuth')->plainTextToken;
 
@@ -48,7 +50,7 @@ class AuthenticationController extends Controller
 
     public function register(RegisterRequest $request): Response
     {
-        $data = $request->all();
+        $data = $request->only('name', 'email', 'password', 'profile_type');
         $data['password'] = bcrypt($data['password']);
         $this->userRepository->create($data);
         return response()->success(Response::HTTP_CREATED);
