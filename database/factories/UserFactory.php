@@ -17,12 +17,21 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $profileTypes = ['developer' => 'App\Models\Developer',
+            'recruiter' => 'App\Models\Recruiter',
+            'administrator' => 'App\Models\Administrator'];
+
+        $profileId = '';
+
         return [
             'name' => fake()->name(),
+            'photo' => fake()->imageUrl(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'profile_type' => ['App\Models\Developer', 'App\Models\Recruiter', 'App\Models\Administrator'],
+            'profile_id' => 1,
         ];
     }
 
