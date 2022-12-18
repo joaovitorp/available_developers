@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('developer_educational_qualifications', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('developer_id');
+            $table->foreign('developer_id')->references('id')->on('developers');
             $table->string('name');
-            $table->string('photo')->nullable();
-            $table->string('email')->unique();
-            $table->string('profile_type');
-            $table->unsignedInteger('profile_id');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('institution');
+            $table->boolean('is_finished');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('developer_educational_qualifications');
     }
 };

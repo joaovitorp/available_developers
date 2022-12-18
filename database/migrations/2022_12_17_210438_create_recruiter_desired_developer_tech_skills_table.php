@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('recruiter_desired_developer_tech_skills', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('photo')->nullable();
-            $table->string('email')->unique();
-            $table->string('profile_type');
-            $table->unsignedInteger('profile_id');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->unsignedBigInteger('recruiter_id');
+            $table->foreign('recruiter_id')->references('id')->on('recruiters');
+            $table->unsignedBigInteger('tech_skill_id');
+            $table->foreign('tech_skill_id')->references('id')->on('tech_skills');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('recruiter_desired_developer_tech_skills');
     }
 };

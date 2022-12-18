@@ -13,18 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('recruiter_companies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('recruiter_id');
+            $table->foreign('recruiter_id')->references('id')->on('recruiters');
             $table->string('name');
-            $table->string('photo')->nullable();
-            $table->string('email')->unique();
-            $table->string('profile_type');
-            $table->unsignedInteger('profile_id');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -35,6 +29,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::table('recruiter_companies', function (Blueprint $table) {
+            $table->dropForeign('recruiter_companies_recruiter_id_foreign');
+        });
+        Schema::dropIfExists('recruiter_companies');
     }
 };
