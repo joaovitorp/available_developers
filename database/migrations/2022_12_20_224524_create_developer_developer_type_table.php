@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tech_skill_types', function (Blueprint $table) {
+        Schema::create('developer_developer_type', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('developer_id');
+            $table->foreign('developer_id')->references('id')->on('developers');
+
+            $table->unsignedBigInteger('developer_type_id');
+            $table->foreign('developer_type_id')->references('id')->on('developer_types');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tech_skill_types');
+        Schema::dropIfExists('developer_developer_type');
     }
 };

@@ -17,9 +17,4 @@ class TechSkill extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
-
-    public function types()
-    {
-        return $this->belongsToMany(TechSkillType::class);
-    }
 }

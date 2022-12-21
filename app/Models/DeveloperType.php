@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TechSkillType extends Model
+class DeveloperType extends Model
 {
     use HasFactory;
 
@@ -18,8 +18,8 @@ class TechSkillType extends Model
         'updated_at' => 'datetime'
     ];
 
-    public function skills()
+    public function developers()
     {
-        return $this->belongsToMany(TechSkill::class);
+        return $this->hasMany(Developer::class);
     }
 }

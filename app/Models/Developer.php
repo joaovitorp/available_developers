@@ -64,4 +64,9 @@ class Developer extends Model
     {
         return $this->hasMany(DeveloperCertification::class);
     }
+
+    public function types()
+    {
+        return $this->belongsToMany(DeveloperType::class);
+    }
 }

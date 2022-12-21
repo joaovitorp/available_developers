@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tech_skill_tech_skill_type', function (Blueprint $table) {
-            $table->unsignedBigInteger('tech_skill_id');
-            $table->foreign('tech_skill_id')->references('id')->on('tech_skills');
-            $table->unsignedBigInteger('tech_skill_type_id');
-            $table->foreign('tech_skill_type_id')->references('id')->on('tech_skill_types');
+        Schema::create('developer_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tech_skill_tech_skill_type');
+        Schema::dropIfExists('developer_types');
     }
 };

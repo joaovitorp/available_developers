@@ -27,7 +27,7 @@ class LanguageSeeder extends Seeder
             'Japanese',
             'Punjabi',
             'German',
-            'Japanese',
+            'Javanese',
             'Wu',
             'Malay',
             'Telugu',
@@ -44,6 +44,8 @@ class LanguageSeeder extends Seeder
         foreach ($languages as $language) {
             Language::insert([
                 'name' => $language,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }
